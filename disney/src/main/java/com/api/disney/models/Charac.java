@@ -1,8 +1,7 @@
-package com.api.disney.entities;
+package com.api.disney.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;

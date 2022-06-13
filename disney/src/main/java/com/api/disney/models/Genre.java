@@ -1,4 +1,4 @@
-package com.api.disney.entities;
+package com.api.disney.models;
 
 import lombok.*;
 
