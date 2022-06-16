@@ -17,19 +17,29 @@ public class Movie {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "movie_id")
     private Long id;
+
     @Column
     private String picture;
+
     @Column(nullable = false, unique = true)
     private String title;
+
     @Column(name = "creation_date", nullable = false)
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate creationDate;
+
     @Column (nullable = false)
     private Integer score;
-    @ManyToMany(mappedBy = "movies",
-            cascade = {CascadeType.MERGE,
-                    CascadeType.PERSIST})
+
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinTable (name="characters_movies",
+            joinColumns = @JoinColumn(name="movie_id"),
+            inverseJoinColumns = @JoinColumn(name = "character_id"))
     private List<Charac> characters;
+
+    @Column(name = "movies_id")
+    private List<Long> moviesId;
+
     @OneToMany(mappedBy = "movies", fetch = FetchType.EAGER)
     private List<Genre> genre;
 }
