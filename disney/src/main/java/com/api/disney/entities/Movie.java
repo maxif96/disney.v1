@@ -1,7 +1,9 @@
 package com.api.disney.entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -28,12 +30,12 @@ public class Movie {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate creationDate;
 
-    @Column (nullable = false)
+    @Column(nullable = false)
     private Integer score;
 
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinTable (name="characters_movies",
-            joinColumns = @JoinColumn(name="movie_id"),
+    @JoinTable(name = "characters_movies",
+            joinColumns = @JoinColumn(name = "movie_id"),
             inverseJoinColumns = @JoinColumn(name = "character_id"))
     private List<Charac> characters;
 
