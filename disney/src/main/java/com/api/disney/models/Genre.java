@@ -24,9 +24,9 @@ public class Genre {
     @Column
     private String picture;
 
-    @ManyToOne(targetEntity = Movie.class)
-    @JoinColumn(name = "movie_id")
-    @ToString.Exclude
-    private List<Movie> movies;
+//    @ManyToOne(targetEntity = Movie.class)
+//    @JoinColumn(name = "movie_id")
+//    @ToString.Exclude
+//    private List<Movie> movies;
 
 }

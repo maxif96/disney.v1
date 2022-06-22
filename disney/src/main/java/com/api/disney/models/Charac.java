@@ -41,4 +41,8 @@ public class Charac {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private List<Movie> movies;
 
+    @ElementCollection
+    @Column(name = "movies_id")
+    private List<Long> moviesId;
+
 }

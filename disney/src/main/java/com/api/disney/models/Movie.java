@@ -39,9 +39,6 @@ public class Movie {
             inverseJoinColumns = @JoinColumn(name = "character_id"))
     private List<Charac> characters;
 
-    @Column(name = "movies_id")
-    private List<Long> moviesId;
-
-    @OneToMany(mappedBy = "movies", fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER)
     private List<Genre> genre;
 }
