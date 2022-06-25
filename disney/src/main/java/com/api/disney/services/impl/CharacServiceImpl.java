@@ -8,6 +8,9 @@ import com.api.disney.services.CharacService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class CharacServiceImpl implements CharacService {
 
@@ -17,9 +20,15 @@ public class CharacServiceImpl implements CharacService {
     private CharacRepository characRepository;
 
     public CharacDTO save(CharacDTO characDTO) {
-        Charac charac = characMapper.CharacDTOToEntity(characDTO);
+        Charac charac = characMapper.characDTOToEntity(characDTO);
         Charac characSaved = characRepository.save(charac);
-        CharacDTO characDTOSaved = characMapper.CharacEntityToDTO(characSaved);
+        CharacDTO characDTOSaved = characMapper.characEntityToDTO(characSaved);
         return characDTOSaved;
+    }
+
+    public List<CharacDTO> getAll() {
+        List<Charac> characs = characRepository.findAll();
+        List<CharacDTO> characDTOList = characMapper.characEntityListToDTOList(characs);
+        return characDTOList;
     }
 }

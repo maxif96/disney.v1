@@ -8,4 +8,6 @@ public interface CharacService {
 
     CharacDTO save (CharacDTO dto);
 
+    List<CharacDTO> getAll ();
+
 }
