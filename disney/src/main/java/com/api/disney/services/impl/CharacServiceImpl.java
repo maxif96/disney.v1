@@ -1,5 +1,6 @@
 package com.api.disney.services.impl;
 
+import com.api.disney.dtos.CharacBasicDTO;
 import com.api.disney.dtos.CharacDTO;
 import com.api.disney.mappers.CharacMapper;
 import com.api.disney.models.Charac;
@@ -19,16 +20,28 @@ public class CharacServiceImpl implements CharacService {
     @Autowired
     private CharacRepository characRepository;
 
-    public CharacDTO save(CharacDTO characDTO) {
-        Charac charac = characMapper.characDTOToEntity(characDTO);
-        Charac characSaved = characRepository.save(charac);
-        CharacDTO characDTOSaved = characMapper.characEntityToDTO(characSaved);
-        return characDTOSaved;
+    public CharacDTO save(CharacDTO characDTO, boolean loadMovies) {
+        Charac charac = characRepository.save(characMapper.characDTOToEntity(characDTO));
+        return characMapper.characEntityToDTO(charac, loadMovies);
     }
 
-    public List<CharacDTO> getAll() {
-        List<Charac> characs = characRepository.findAll();
-        List<CharacDTO> characDTOList = characMapper.characEntityListToDTOList(characs);
-        return characDTOList;
+    public List<CharacDTO> getAll(boolean loadMovies) {
+        return characMapper.characEntityListToDTOList(characRepository.findAll(), loadMovies);
     }
+
+    public void delete(Long id) {
+        characRepository.deleteById(id);
+    }
+
+    public CharacDTO update(Long id, CharacDTO dto, boolean loadMovies) {
+        Charac charac = characRepository.findById(id).get();
+        charac.setAge(dto.getAge());
+        charac.setName(dto.getName());
+        charac.setPicture(dto.getPicture());
+        charac.setStory(dto.getStory());
+        charac.setWeight(dto.getWeight());
+        return characMapper.characEntityToDTO(characRepository.save(charac), loadMovies);
+    }
+
+
 }

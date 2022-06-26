@@ -16,16 +16,27 @@ public class CharacController {
     @Autowired
     private CharacService characService;
 
+    @PostMapping
+    public ResponseEntity<CharacDTO> save(@RequestBody CharacDTO characDTO, @RequestParam(value = "loadMovies", required = false) boolean loadMovies){
+        CharacDTO characSaved = characService.save(characDTO, loadMovies);
+        return ResponseEntity.status(HttpStatus.CREATED).body(characSaved);
+    }
     @GetMapping
-    public ResponseEntity<List<CharacDTO>> getAll(){
-        List<CharacDTO> characDTOList = characService.getAll();
+    public ResponseEntity<List<CharacDTO>> getAll(@RequestParam(value = "loadMovies", required = false) boolean loadMovies){
+        List<CharacDTO> characDTOList = characService.getAll(loadMovies);
         return ResponseEntity.ok().body(characDTOList);
     }
 
-    @PostMapping
-    public ResponseEntity<CharacDTO> save(@RequestBody CharacDTO characDTO){
-        CharacDTO characSaved = characService.save(characDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(characSaved);
+    @PutMapping("/{id}")
+    public ResponseEntity<CharacDTO> update(@PathVariable Long id, @RequestBody CharacDTO characDTO, @RequestParam(value = "loadMovies", required = false) boolean loadMovies){
+        CharacDTO characUpdate = characService.update(id, characDTO, loadMovies);
+        return ResponseEntity.ok().body(characUpdate);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete (@PathVariable Long id){
+        characService.delete(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
 }

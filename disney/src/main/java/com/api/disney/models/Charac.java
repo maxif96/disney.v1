@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -12,6 +15,8 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@SQLDelete(sql = "UPDATE characters SET is_on = false WHERE character_id =?")
+@Where(clause = "is_on = true")
 public class Charac {
 
     @Id
@@ -44,5 +49,8 @@ public class Charac {
     @ElementCollection
     @Column(name = "movies_id")
     private List<Long> moviesId;
+
+    @Column(name = "is_on")
+    private boolean isOn = Boolean.TRUE;
 
 }
