@@ -1,12 +1,13 @@
 package com.api.disney.services;
 
 import com.api.disney.dtos.MovieDTO;
+import com.api.disney.dtos.MovieRequestDTO;
 
 import java.util.List;
 
 public interface MovieService {
 
-    MovieDTO save (MovieDTO movieDTO, boolean loadCharacters);
+    MovieDTO save (MovieRequestDTO movieDTO, boolean loadCharacters);
 
     List<MovieDTO> getAll(boolean loadCharacters);
 

@@ -1,6 +1,7 @@
 package com.api.disney.controllers;
 
 import com.api.disney.dtos.MovieDTO;
+import com.api.disney.dtos.MovieRequestDTO;
 import com.api.disney.services.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -19,8 +20,8 @@ public class MovieController {
     MovieService movieService;
 
     @PostMapping
-    public ResponseEntity<MovieDTO> save (@RequestBody MovieDTO movieDTO,
-                                          @RequestParam(value = "loadCharacters", required = false) boolean loadCharacters){
+    public ResponseEntity<MovieDTO> save (@RequestBody MovieRequestDTO movieDTO,
+                                          @RequestParam(value = "loadCharacters", required = false, defaultValue = "true") boolean loadCharacters){
         MovieDTO movieSaved = movieService.save(movieDTO, loadCharacters);
         return ResponseEntity.status(HttpStatus.CREATED).body(movieSaved);
     }
