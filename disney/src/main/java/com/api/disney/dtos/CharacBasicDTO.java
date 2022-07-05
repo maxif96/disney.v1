@@ -10,5 +10,4 @@ public class CharacBasicDTO {
     private Long id;
     private String picture;
     private String name;
-
 }

@@ -3,7 +3,6 @@ package com.api.disney.mappers;
 import com.api.disney.dtos.CharacBasicDTO;
 import com.api.disney.dtos.MovieBasicDTO;
 import com.api.disney.dtos.MovieDTO;
-import com.api.disney.dtos.MovieRequestDTO;
 import com.api.disney.models.Charac;
 import com.api.disney.models.Movie;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,22 +18,14 @@ public class MovieMapper {
     @Autowired @Lazy
     CharacMapper characMapper;
 
-    public Movie movieRequestDTOToEntity(MovieRequestDTO movieDTO) {
-        Movie movie = new Movie();
-        movie.setTitle(movieDTO.getTitle());
-        movie.setPicture(movieDTO.getPicture());
-        movie.setCreationDate(movieDTO.getCreationDate());
-        movie.setScore(movieDTO.getScore());
-
-        return movie;
-    }
-
     public Movie movieDTOToEntity(MovieDTO movieDTO) {
         Movie movie = new Movie();
         movie.setTitle(movieDTO.getTitle());
         movie.setPicture(movieDTO.getPicture());
         movie.setCreationDate(movieDTO.getCreationDate());
         movie.setScore(movieDTO.getScore());
+        movie.setCharacters(movieDTO.getCharacters());
+        movie.setGenres(movieDTO.getGenres());
 
         return movie;
     }
@@ -48,6 +39,7 @@ public class MovieMapper {
         movieDTO.setScore(movie.getScore());
         movieDTO.setGenres(movie.getGenres());
         if (loadCharacters){
+            characMapper.characEntityListToDTOList(movie.getCharacters(), loadCharacters);
             movieDTO.setCharacters(movie.getCharacters());
         }
 

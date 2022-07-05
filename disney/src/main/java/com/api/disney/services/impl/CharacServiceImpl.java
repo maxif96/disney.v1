@@ -32,11 +32,6 @@ public class CharacServiceImpl implements CharacService {
     public void delete(Long id) {
         characRepository.deleteById(id);
     }
-    public List<Charac> getAllById(List<Long> id) {
-
-        List<Charac> characs = characRepository.findAllById(id);
-        return characs;
-    }
 
     public CharacDTO update(Long id, CharacDTO dto, boolean loadMovies) {
         Charac charac = characRepository.findById(id).get();

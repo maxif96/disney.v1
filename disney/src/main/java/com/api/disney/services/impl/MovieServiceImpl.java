@@ -1,12 +1,9 @@
 package com.api.disney.services.impl;
 
 import com.api.disney.dtos.MovieDTO;
-import com.api.disney.dtos.MovieRequestDTO;
 import com.api.disney.mappers.MovieMapper;
-import com.api.disney.models.Charac;
 import com.api.disney.models.Movie;
 import com.api.disney.repositories.MovieRepository;
-import com.api.disney.services.CharacService;
 import com.api.disney.services.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,18 +14,13 @@ import java.util.List;
 public class MovieServiceImpl implements MovieService {
 
     @Autowired
-    private MovieMapper movieMapper;
+    MovieMapper movieMapper;
     @Autowired
-    private MovieRepository movieRepository;
-    @Autowired
-    private CharacService characService;
+    MovieRepository movieRepository;
 
 
-    public MovieDTO save(MovieRequestDTO movieDTO, boolean loadCharacters) {
-        List<Charac> characs = characService.getAllById(movieDTO.getCharacters());
-        Movie movie = movieMapper.movieRequestDTOToEntity(movieDTO);
-        movie.setCharacters(characs);
-        movieRepository.save(movie);
+    public MovieDTO save(MovieDTO movieDTO, boolean loadCharacters) {
+        Movie movie = movieRepository.save(movieMapper.movieDTOToEntity(movieDTO));
         return movieMapper.movieEntityToDTO(movie, loadCharacters);
     }
 

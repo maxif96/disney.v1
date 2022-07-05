@@ -2,7 +2,6 @@ package com.api.disney.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
@@ -18,7 +17,6 @@ import java.util.List;
 @NoArgsConstructor
 @SQLDelete(sql = "UPDATE movies SET is_on = false WHERE movie_id =?")
 @Where(clause = "is_on = true")
-@Builder
 public class Movie {
 
     @Id

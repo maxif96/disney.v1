@@ -1,8 +1,6 @@
 package com.api.disney.controllers;
 
 import com.api.disney.dtos.CharacDTO;
-import com.api.disney.dtos.CharacListDTO;
-import com.api.disney.models.Charac;
 import com.api.disney.services.CharacService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
