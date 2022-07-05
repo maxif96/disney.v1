@@ -5,6 +5,8 @@ import com.api.disney.dtos.MovieBasicDTO;
 import com.api.disney.dtos.MovieDTO;
 import com.api.disney.models.Charac;
 import com.api.disney.models.Movie;
+import com.api.disney.repositories.CharacRepository;
+import com.api.disney.repositories.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
@@ -17,6 +19,10 @@ public class MovieMapper {
 
     @Autowired @Lazy
     CharacMapper characMapper;
+    @Autowired
+    CharacRepository characRepository;
+    @Autowired
+    MovieRepository movieRepository;
 
     public Movie movieDTOToEntity(MovieDTO movieDTO) {
         Movie movie = new Movie();
@@ -24,7 +30,11 @@ public class MovieMapper {
         movie.setPicture(movieDTO.getPicture());
         movie.setCreationDate(movieDTO.getCreationDate());
         movie.setScore(movieDTO.getScore());
-        movie.setCharacters(movieDTO.getCharacters());
+        List<Charac> characs = new ArrayList<>();
+        for (Long id: movieDTO.getCharacters()) {
+            characs.add(characRepository.findById(id).get());
+        }
+        movie.setCharacters(characs);
         movie.setGenres(movieDTO.getGenres());
 
         return movie;
@@ -38,9 +48,13 @@ public class MovieMapper {
         movieDTO.setCreationDate(movie.getCreationDate());
         movieDTO.setScore(movie.getScore());
         movieDTO.setGenres(movie.getGenres());
+        List<Long> idCharacList = new ArrayList<>();
         if (loadCharacters){
-            characMapper.characEntityListToDTOList(movie.getCharacters(), loadCharacters);
-            movieDTO.setCharacters(movie.getCharacters());
+            for (Charac charac:
+                  movie.getCharacters()) {
+                idCharacList.add(charac.getId());
+            }
+            movieDTO.setCharacters(idCharacList);
         }
 
         return movieDTO;
