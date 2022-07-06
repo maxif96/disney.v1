@@ -18,6 +18,7 @@ public class MovieDTO {
     private LocalDate creationDate;
     private Integer score;
     private List<Long> characters;
+    private List<CharacDTO> charactersResponse;
     private List<Genre> genres;
 
 }

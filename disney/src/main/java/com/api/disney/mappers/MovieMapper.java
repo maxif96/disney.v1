@@ -1,6 +1,6 @@
 package com.api.disney.mappers;
 
-import com.api.disney.dtos.CharacBasicDTO;
+import com.api.disney.dtos.CharacDTO;
 import com.api.disney.dtos.MovieBasicDTO;
 import com.api.disney.dtos.MovieDTO;
 import com.api.disney.models.Charac;
@@ -17,7 +17,8 @@ import java.util.List;
 @Component
 public class MovieMapper {
 
-    @Autowired @Lazy
+    @Autowired
+    @Lazy
     CharacMapper characMapper;
     @Autowired
     CharacRepository characRepository;
@@ -31,10 +32,13 @@ public class MovieMapper {
         movie.setCreationDate(movieDTO.getCreationDate());
         movie.setScore(movieDTO.getScore());
         List<Charac> characs = new ArrayList<>();
-        for (Long id: movieDTO.getCharacters()) {
-            characs.add(characRepository.findById(id).get());
+        if (movieDTO.getCharacters() != null) {
+            for (Long id : movieDTO.getCharacters()) {
+                characs.add(characRepository.findById(id).get());
+            }
+            movie.setCharacters(characs);
         }
-        movie.setCharacters(characs);
+
         movie.setGenres(movieDTO.getGenres());
 
         return movie;
@@ -48,13 +52,13 @@ public class MovieMapper {
         movieDTO.setCreationDate(movie.getCreationDate());
         movieDTO.setScore(movie.getScore());
         movieDTO.setGenres(movie.getGenres());
-        List<Long> idCharacList = new ArrayList<>();
-        if (loadCharacters){
-            for (Charac charac:
-                  movie.getCharacters()) {
-                idCharacList.add(charac.getId());
+        if (loadCharacters) {
+            List<CharacDTO> characDTOList = new ArrayList<>();
+            for (Charac charac :
+                    movie.getCharacters()) {
+                characDTOList.add(characMapper.characEntityToDTO(charac, false));
             }
-            movieDTO.setCharacters(idCharacList);
+            movieDTO.setCharactersResponse(characDTOList);
         }
 
         return movieDTO;
@@ -68,10 +72,10 @@ public class MovieMapper {
         return movieDTOList;
     }
 
-    public List<MovieBasicDTO> movieEntityListToCharacBasicDTOList(List<Movie> movies){
+    public List<MovieBasicDTO> movieEntityListToCharacBasicDTOList(List<Movie> movies) {
         List<MovieBasicDTO> movieBasicDTOs = new ArrayList<>();
         MovieBasicDTO basicDTO;
-        for (Movie movie : movies){
+        for (Movie movie : movies) {
             basicDTO = new MovieBasicDTO();
             basicDTO.setId(movie.getId());
             basicDTO.setTitle(movie.getTitle());
