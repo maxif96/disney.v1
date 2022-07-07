@@ -20,19 +20,23 @@ public class MovieController {
 
     @PostMapping
     public ResponseEntity<MovieDTO> save (@RequestBody MovieDTO movieDTO,
-                                          @RequestParam(value = "loadCharacters", required = false) boolean loadCharacters){
+                                          @RequestParam(value = "loadCharacters",
+                                                  required = false) boolean loadCharacters){
         MovieDTO movieSaved = movieService.save(movieDTO, loadCharacters);
         return ResponseEntity.status(HttpStatus.CREATED).body(movieSaved);
     }
 
     @GetMapping
-    public ResponseEntity<List<MovieDTO>> getAll(@RequestParam(value = "loadCharacters", required = false) boolean loadCharacters){
+    public ResponseEntity<List<MovieDTO>> getAll(@RequestParam(value = "loadCharacters",
+            required = false) boolean loadCharacters){
         List<MovieDTO> movieDTOList = movieService.getAll(loadCharacters);
         return ResponseEntity.ok().body(movieDTOList);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<MovieDTO> update (@PathVariable Long id, @RequestBody MovieDTO movieDTO, boolean loadCharacters){
+    public ResponseEntity<MovieDTO> update (@PathVariable Long id,
+                                            @RequestBody MovieDTO movieDTO,
+                                            boolean loadCharacters){
         MovieDTO movieUpdated = movieService.update(id, movieDTO, loadCharacters);
         return  ResponseEntity.ok().body(movieUpdated);
     }
@@ -43,6 +47,16 @@ public class MovieController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    @PutMapping("/{movieId}/character")
+    public ResponseEntity<MovieDTO> addCharacter(@PathVariable Long movieId,
+                                                 @RequestBody MovieDTO movieDTO,
+                                                 @RequestParam(
+                                                         value = "loadCharacters",
+                                                         required = false
+                                                 ) boolean loadCharacters) throws Exception {
+        MovieDTO movieResponse = movieService.addCharacter(movieId, movieDTO.getCharacters(), loadCharacters);
+        return ResponseEntity.ok().body(movieResponse);
+    }
 
 
 }

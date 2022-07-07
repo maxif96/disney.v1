@@ -1,6 +1,5 @@
 package com.api.disney.dtos;
 
-import com.api.disney.models.Movie;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,6 +15,6 @@ public class CharacDTO {
     private Integer age;
     private Integer weight;
     private String story;
-    private List<Movie> movies;
+    private List<MovieDTO> movies;
 
 }

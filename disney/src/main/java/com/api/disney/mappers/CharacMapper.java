@@ -2,7 +2,9 @@ package com.api.disney.mappers;
 
 import com.api.disney.dtos.CharacBasicDTO;
 import com.api.disney.dtos.CharacDTO;
+import com.api.disney.dtos.MovieDTO;
 import com.api.disney.models.Charac;
+import com.api.disney.models.Movie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -22,7 +24,13 @@ public class CharacMapper {
         charac.setPicture(characDTO.getPicture());
         charac.setStory(characDTO.getStory());
         charac.setWeight(characDTO.getWeight());
-        charac.setMovies(characDTO.getMovies());
+        List<Movie> movieList = new ArrayList<>();
+        if (characDTO.getMovies() != null) {
+            for (MovieDTO movieDTO : characDTO.getMovies()) {
+                movieList.add(movieMapper.movieDTOToEntity(movieDTO));
+            }
+            charac.setMovies(movieList);
+        }
 
         return charac;
     }
@@ -35,16 +43,17 @@ public class CharacMapper {
         characDTO.setPicture(charac.getPicture());
         characDTO.setStory(charac.getStory());
         characDTO.setWeight(charac.getWeight());
-        if (loadMovies){
-            movieMapper.movieEntityListToDTOList(charac.getMovies(), loadMovies);
-            characDTO.setMovies(charac.getMovies());
+        if (loadMovies) {
+            List<MovieDTO> movieDTOList = new ArrayList<>();
+            movieDTOList = movieMapper.movieEntityListToDTOList(charac.getMovies(), false);
+            characDTO.setMovies(movieDTOList);
         }
 
 
         return characDTO;
     }
 
-    public List<CharacDTO> characEntityListToDTOList(List<Charac> characs, boolean loadMovies){
+    public List<CharacDTO> characEntityListToDTOList(List<Charac> characs, boolean loadMovies) {
         List<CharacDTO> characDTOList = new ArrayList<>();
         for (Charac charac : characs) {
             characDTOList.add(characEntityToDTO(charac, loadMovies));
@@ -52,10 +61,10 @@ public class CharacMapper {
         return characDTOList;
     }
 
-    public List<CharacBasicDTO> characEntityListToCharacBasicDTOList(List<Charac> characs){
+    public List<CharacBasicDTO> characEntityListToCharacBasicDTOList(List<Charac> characs) {
         List<CharacBasicDTO> characBasicDTOs = new ArrayList<>();
         CharacBasicDTO basicDTO;
-        for (Charac charac : characs){
+        for (Charac charac : characs) {
             basicDTO = new CharacBasicDTO();
             basicDTO.setId(charac.getId());
             basicDTO.setName(charac.getName());
