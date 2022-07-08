@@ -19,15 +19,20 @@ public class GenreServiceImpl implements GenreService {
     @Autowired
     GenreMapper genreMapper;
 
+    /*----C R U D----*/
+
+    /*----------------SAVE A GENRE-----------------(CREATE)*/
     public GenreDTO save(GenreDTO dto) {
         Genre genre = genreRepository.save(genreMapper.genreDTOToEntity(dto));
         return genreMapper.genreEntityToDTO(genre);
     }
 
+    /*----------------GET ALL GENRES FROM DATABASE-----------------(READ)*/
     public List<GenreDTO> getAll() {
         return genreMapper.genreEntityListToDTOList(genreRepository.findAll());
     }
 
+    /*----------------UPDATE A GENRE FROM DATABASE BY ID----------------(UPDATE)*/
     public GenreDTO update(Long id, GenreDTO dto) {
         Genre genre = genreRepository.findById(id).get();
         genre.setName(dto.getName());
@@ -36,7 +41,10 @@ public class GenreServiceImpl implements GenreService {
         return genreMapper.genreEntityToDTO(genreRepository.save(genre));
     }
 
+    /*----------------DELETE GENRE FROM DATABASE BY ID (SOFT)----------------(DELETE)*/
     public void delete(Long id) {
         genreRepository.deleteById(id);
     }
+
+    /*----------------*/
 }

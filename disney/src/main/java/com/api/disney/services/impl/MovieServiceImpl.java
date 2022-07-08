@@ -25,17 +25,21 @@ public class MovieServiceImpl implements MovieService {
     @Autowired
     CharacRepository characRepository;
 
+    /*----C R U D----*/
 
+
+    /*----------------SAVE A MOVIE-----------------(CREATE)*/
     public MovieDTO save(MovieDTO movieDTO, boolean loadCharacters) {
         Movie movie = movieRepository.save(movieMapper.movieDTOToEntity(movieDTO));
         return movieMapper.movieEntityToDTO(movie, loadCharacters);
     }
 
-
+    /*----------------GET ALL MOVIES FROM DATABASE-----------------(READ)*/
     public List<MovieDTO> getAll(boolean loadCharacters) {
         return movieMapper.movieEntityListToDTOList(movieRepository.findAll(), loadCharacters);
     }
 
+    /*----------------UPDATE A MOVIE FROM DATABASE BY ID----------------(UPDATE)*/
     public MovieDTO update(Long id, MovieDTO dto, boolean loadCharacters) {
         Movie movie = movieRepository.findById(id).get();
         movie.setTitle(dto.getTitle());
@@ -52,6 +56,14 @@ public class MovieServiceImpl implements MovieService {
         return movieMapper.movieEntityToDTO(movieRepository.save(movie), loadCharacters);
     }
 
+    /*----------------DELETE MOVIE FROM DATABASE BY ID (SOFT)----------------(DELETE)*/
+    public void delete(Long id) {
+        movieRepository.deleteById(id);
+    }
+
+    /*----------------*/
+
+    /*----------------ADD CHARACTER TO A MOVIE----------------*/
     public MovieDTO addCharacter(Long idMovie, List<Long> idCharacters, boolean loadCharacters) throws Exception {
 
         Movie movie = movieRepository
@@ -68,10 +80,5 @@ public class MovieServiceImpl implements MovieService {
         movieRepository.save(movie);
         return movieMapper.movieEntityToDTO(movie, loadCharacters);
     }
-
-    public void delete(Long id) {
-        movieRepository.deleteById(id);
-    }
-
 
 }
