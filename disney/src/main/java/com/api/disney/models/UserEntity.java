@@ -1,9 +1,6 @@
 package com.api.disney.models;
 
-import com.api.disney.security.util.Role;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -11,6 +8,9 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "users")
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,8 +18,10 @@ public class UserEntity {
     private Long id;
     @Column(unique = true, nullable = false)
     private String email;
-    @Column(nullable = false, unique = true)
-    private String username;
+    @Column(nullable = false)
+    private String name;
+    @Column(nullable = false)
+    private String lastName;
     @Column(nullable = false)
     private String password;
     @Column

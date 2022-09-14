@@ -10,14 +10,14 @@ import java.util.List;
 
 @Getter
 @Setter
-public class MovieDTO {
+public class MovieResponseDTO {
 
     private Long id;
     private String picture;
     private String title;
     private LocalDate creationDate;
     private Integer score;
-    private List<Charac> characters;
-    private List<Genre> genres;
+    private List<Long> characters;
+    private List<Long> genres;
 
 }

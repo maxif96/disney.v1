@@ -1,85 +1,77 @@
 package com.api.disney.services.impl;
 
-import com.api.disney.dtos.LoginDTO;
-import com.api.disney.dtos.RegisterDTO;
-import com.api.disney.mappers.UserMapper;
+
+import com.api.disney.auth.UserRepository;
+import com.api.disney.auth.dto.response.UserResponseDTO;
+import com.api.disney.auth.utils.JwUtils;
+import com.api.disney.exception.UserNotFoundException;
+import com.api.disney.mappers.UsersMapper;
 import com.api.disney.models.UserEntity;
-import com.api.disney.repositories.UserRepository;
-import com.api.disney.security.JwUtil;
 import com.api.disney.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.context.MessageSource;
+import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.persistence.EntityNotFoundException;
+import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
 
-import static com.api.disney.security.util.Role.ROLE_USER;
-
+@Service
 public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private JwUtil jwUtil;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-    @Autowired
-    private AuthenticationManager authentication;
-    @Autowired
-    private UserDetailsService userDetailsService;
-    @Autowired
-    private UserMapper userMapper;
+    private UsersMapper usersMapper;
 
-    public UserEntity findByUsername(String username) throws Exception {
-        return userRepository.findByUsername(username).orElseThrow(() -> new Exception("Username invalid"));
+    @Autowired
+    private JwUtils jwUtils;
+
+    public List<UserResponseDTO> getAll() {
+        return usersMapper.userEntityListToDTOList(userRepository.findAll());
     }
 
-    public String login(LoginDTO loginDTO) {
-        try {
-            String username = loginDTO.getUsername(), password = loginDTO.getPassword();
 
-            Authentication auth = authentication.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-            UserDetails user = (UserDetails) auth.getPrincipal();
+    @Override
+    public UserResponseDTO getUserDataByToken(String token) throws UserNotFoundException {
+        String email = jwUtils.extractUsername(token.substring(7));
+        UserEntity users = userRepository
+                .findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("User with that email was not found."));
+        return usersMapper.userEntityToDTO(users);
+    }
 
-            return jwUtil.generateToken(user, 10);
-        } catch (Exception e) {
-            throw new BadCredentialsException(e.getLocalizedMessage() + ": incorrect e-mail or password or email not confirm");
+
+    public void deleteUser(Long id) throws Exception {
+        Optional<UserEntity> response = userRepository.findById(id);
+        if (response.isPresent()) {
+            UserEntity users = response.get();
+            userRepository.delete(users);
+        } else {
+            throw new Exception("User can not be deleted.");
         }
-
     }
 
-    public void register(RegisterDTO registerDTO) {
-
-        if (userRepository.existsByEmail(registerDTO.getEmail())) {
-            throw new RuntimeException("The email already in use");
+    @Override
+    public UserResponseDTO findById(Long id) {
+        Optional<UserEntity> res = userRepository.findById(id);
+        if (res.isPresent()) {
+            UserEntity user = res.get();
+            return usersMapper.userEntityToDTO(user);
+        } else {
+            throw new EntityNotFoundException("UserNotFound");
         }
-        String password = passwordEncoder.encode(registerDTO.getPassword());
-
-        UserEntity user = userMapper.DTOToEntity(registerDTO);
-        user.setRole(ROLE_USER);
-        user.setPassword(password);
-        userRepository.save(user);
     }
 
-    public String tokenRefresh(HttpServletRequest httpServletRequest) {
-        final String authorizationHeader = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
-        String username = null;
-
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            String jwt = authorizationHeader.substring(7);
-            username = jwUtil.extractUsername(jwt);
-        }
-
-        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-
-        return jwUtil.generateToken(userDetails, 20);
+    @Override
+    public UserResponseDTO findByEmail(String email) throws UserNotFoundException {
+        UserEntity user = userRepository
+                .findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("User with that email was not found."));
+        return usersMapper.userEntityToDTO(user);
     }
+
 }
 
 

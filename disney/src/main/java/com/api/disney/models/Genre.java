@@ -1,38 +1,39 @@
 package com.api.disney.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.util.List;
 
-@Entity (name = "genres")
-@Data
-@AllArgsConstructor
+@Entity
+@Table(name = "genres")
+@Getter
+@Setter
+@Builder
 @NoArgsConstructor
-@SQLDelete(sql = "UPDATE genres SET is_on = false WHERE genre_id =?")
-@Where(clause = "is_on = true")
+@AllArgsConstructor
+@SQLDelete(sql = "UPDATE genres SET deleted = true WHERE id =?")
+@Where(clause = "deleted = false")
 public class Genre {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "genre_id")
+    @Column
     private Long id;
 
     @Column
     private String name;
     @Column
     private String picture;
-    @Column(name = "is_on")
-    private boolean isOn = Boolean.TRUE;
+    @Column
+    private boolean deleted;
 
-//    @ManyToOne(targetEntity = Movie.class)
-//    @JoinColumn(name = "movie_id")
-//    @ToString.Exclude
-//    private List<Movie> movies;
+    @ManyToMany
+    @JoinTable(name = "genres_movies",
+            joinColumns = {@JoinColumn(name = "genre_id")},
+            inverseJoinColumns = {@JoinColumn(name = "movie_id")})
+    private List<Movie> movies;
 
 }

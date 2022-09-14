@@ -1,10 +1,7 @@
 package com.api.disney.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -12,18 +9,20 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 
-@Entity (name = "movies")
-@Data
-@AllArgsConstructor
+@Entity
+@Table(name = "movies")
+@Getter
+@Setter
 @NoArgsConstructor
-@SQLDelete(sql = "UPDATE movies SET is_on = false WHERE movie_id =?")
-@Where(clause = "is_on = true")
+@AllArgsConstructor
+@SQLDelete(sql = "UPDATE movies SET deleted = true WHERE id =?")
+@Where(clause = "deleted = false")
 @Builder
 public class Movie {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "movie_id")
+    @Column
     private Long id;
 
     @Column
@@ -39,15 +38,15 @@ public class Movie {
     @Column(nullable = false)
     private Integer score;
 
-    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinTable(name = "characters_movies",
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER)
+    @JoinTable(name = "movies_characters",
             joinColumns = @JoinColumn(name = "movie_id"),
             inverseJoinColumns = @JoinColumn(name = "character_id"))
     private List<Charac> characters;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "movies")
     private List<Genre> genres;
 
-    @Column(name = "is_on")
-    private boolean isOn = Boolean.TRUE;
+    @Column
+    private boolean deleted;
 }

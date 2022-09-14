@@ -1,27 +1,26 @@
 package com.api.disney.models;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.util.List;
 
-@Entity (name = "characters")
-@Data
-@AllArgsConstructor
+@Entity
+@Table(name = "characters")
+@Getter
+@Setter
+@Builder
 @NoArgsConstructor
-@SQLDelete(sql = "UPDATE characters SET is_on = false WHERE character_id =?")
-@Where(clause = "is_on = true")
+@AllArgsConstructor
+@SQLDelete(sql = "UPDATE characters SET deleted = true WHERE id =?")
+@Where(clause = "deleted = false")
 public class Charac {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "character_id")
+    @Column
     private Long id;
 
     @Column
@@ -36,17 +35,15 @@ public class Charac {
     @Column
     private Integer weight;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String story;
 
     @ManyToMany(mappedBy = "characters",
             cascade = {CascadeType.MERGE,
                     CascadeType.PERSIST})
-    @ToString.Exclude
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private List<Movie> movies;
 
-    @Column(name = "is_on")
-    private boolean isOn = Boolean.TRUE;
+    @Column
+    private boolean deleted;
 
 }

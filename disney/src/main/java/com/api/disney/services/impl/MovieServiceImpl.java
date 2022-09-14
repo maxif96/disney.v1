@@ -1,6 +1,6 @@
 package com.api.disney.services.impl;
 
-import com.api.disney.dtos.MovieDTO;
+import com.api.disney.dtos.MovieResponseDTO;
 import com.api.disney.dtos.MovieRequestDTO;
 import com.api.disney.mappers.MovieMapper;
 import com.api.disney.models.Charac;
@@ -24,7 +24,7 @@ public class MovieServiceImpl implements MovieService {
     private CharacService characService;
 
 
-    public MovieDTO save(MovieRequestDTO movieDTO, boolean loadCharacters) {
+    public MovieResponseDTO save(MovieRequestDTO movieDTO, boolean loadCharacters) {
         List<Charac> characs = characService.getAllById(movieDTO.getCharacters());
         Movie movie = movieMapper.movieRequestDTOToEntity(movieDTO);
         movie.setCharacters(characs);
@@ -33,20 +33,21 @@ public class MovieServiceImpl implements MovieService {
     }
 
 
-    public List<MovieDTO> getAll(boolean loadCharacters) {
+    public List<MovieResponseDTO> getAll(boolean loadCharacters) {
         return movieMapper.movieEntityListToDTOList(movieRepository.findAll(), loadCharacters);
     }
 
-    public MovieDTO update(Long id, MovieDTO dto, boolean loadCharacters) {
-        Movie movie = movieRepository.findById(id).get();
-        movie.setTitle(dto.getTitle());
-        movie.setPicture(dto.getPicture());
-        movie.setGenres(dto.getGenres());
-        movie.setCharacters(dto.getCharacters());
-        movie.setScore(dto.getScore());
-        movie.setCreationDate(dto.getCreationDate());
-
-        return movieMapper.movieEntityToDTO(movieRepository.save(movie), loadCharacters);
+    public MovieResponseDTO update(Long id, MovieResponseDTO dto, boolean loadCharacters) {
+//        Movie movie = movieRepository.findById(id).get();
+//        movie.setTitle(dto.getTitle());
+//        movie.setPicture(dto.getPicture());
+//        movie.setGenres(dto.getGenres());
+//        movie.setCharacters(dto.getCharacters());
+//        movie.setScore(dto.getScore());
+//        movie.setCreationDate(dto.getCreationDate());
+//
+//        return movieMapper.movieEntityToDTO(movieRepository.save(movie), loadCharacters);
+        return null;
     }
 
     public void delete(Long id) {

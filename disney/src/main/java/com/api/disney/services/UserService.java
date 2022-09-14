@@ -1,18 +1,21 @@
 package com.api.disney.services;
 
-import com.api.disney.dtos.LoginDTO;
-import com.api.disney.dtos.RegisterDTO;
+
+import com.api.disney.auth.dto.response.UserResponseDTO;
+import com.api.disney.exception.UserNotFoundException;
 import com.api.disney.models.UserEntity;
 
-import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 public interface UserService {
 
-    UserEntity findByUsername(String username) throws Exception;
+    List<UserResponseDTO> getAll();
 
-    String login(LoginDTO loginDTO);
-    void register(RegisterDTO registerDTO);
+    UserResponseDTO getUserDataByToken(String token) throws UserNotFoundException;
 
-    String tokenRefresh(HttpServletRequest httpServletRequest);
+    void deleteUser(Long id) throws Exception;
 
+    UserResponseDTO findById(Long id);
+
+    UserResponseDTO findByEmail(String email) throws UserNotFoundException;
 }
