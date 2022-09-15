@@ -5,6 +5,8 @@ import com.api.disney.dtos.MovieResponseDTO;
 import com.api.disney.dtos.MovieRequestDTO;
 import com.api.disney.models.Genre;
 import com.api.disney.models.Movie;
+import com.api.disney.repositories.CharacRepository;
+import com.api.disney.repositories.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
@@ -16,20 +18,16 @@ import java.util.stream.Collectors;
 @Component
 public class MovieMapper {
 
-    @Autowired @Lazy
-    CharacMapper characMapper;
+    @Autowired
+    @Lazy
+    private CharacMapper characMapper;
+    @Autowired
+    private CharacRepository characRepository;
 
-    public Movie movieRequestDTOToEntity(MovieRequestDTO movieDTO) {
-        Movie movie = new Movie();
-        movie.setTitle(movieDTO.getTitle());
-        movie.setPicture(movieDTO.getPicture());
-        movie.setCreationDate(movieDTO.getCreationDate());
-        movie.setScore(movieDTO.getScore());
+    @Autowired
+    private MovieRepository movieRepository;
 
-        return movie;
-    }
-
-    public Movie movieDTOToEntity(MovieResponseDTO movieResponseDTO) {
+    public Movie movieDTOToEntity(MovieRequestDTO movieResponseDTO) {
         Movie movie = new Movie();
         movie.setTitle(movieResponseDTO.getTitle());
         movie.setPicture(movieResponseDTO.getPicture());
@@ -67,10 +65,10 @@ public class MovieMapper {
         return movieResponseDTOList;
     }
 
-    public List<MovieBasicDTO> movieEntityListToCharacBasicDTOList(List<Movie> movies){
+    public List<MovieBasicDTO> movieEntityListToCharacBasicDTOList(List<Movie> movies) {
         List<MovieBasicDTO> movieBasicDTOs = new ArrayList<>();
         MovieBasicDTO basicDTO;
-        for (Movie movie : movies){
+        for (Movie movie : movies) {
             basicDTO = new MovieBasicDTO();
             basicDTO.setId(movie.getId());
             basicDTO.setTitle(movie.getTitle());
@@ -80,4 +78,7 @@ public class MovieMapper {
         return movieBasicDTOs;
     }
 
+    public Movie movieRequestDTOToEntity(MovieRequestDTO movieDTO) {
+        return null;
+    }
 }

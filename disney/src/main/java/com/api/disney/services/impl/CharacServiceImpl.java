@@ -20,24 +20,18 @@ public class CharacServiceImpl implements CharacService {
     @Autowired
     private CharacRepository characRepository;
 
+    /*----C R U D----*/
+
+    /*----------------SAVE A CHARACTER-----------------(CREATE)*/
     public CharacDTO save(CharacDTO characDTO, boolean loadMovies) {
         Charac charac = characRepository.save(characMapper.characDTOToEntity(characDTO));
         return characMapper.characEntityToDTO(charac, loadMovies);
     }
-
+    /*----------------GET ALL CHARACTERS FROM DATABASE-----------------(READ)*/
     public List<CharacDTO> getAll(boolean loadMovies) {
         return characMapper.characEntityListToDTOList(characRepository.findAll(), loadMovies);
     }
-
-    public void delete(Long id) {
-        characRepository.deleteById(id);
-    }
-    public List<Charac> getAllById(List<Long> id) {
-
-        List<Charac> characs = characRepository.findAllById(id);
-        return characs;
-    }
-
+    /*----------------UPDATE CHARACTER FROM DATABASE BY ID----------------(UPDATE)*/
     public CharacDTO update(Long id, CharacDTO dto, boolean loadMovies) {
         Charac charac = characRepository.findById(id).get();
         charac.setAge(dto.getAge());
@@ -47,6 +41,18 @@ public class CharacServiceImpl implements CharacService {
         charac.setWeight(dto.getWeight());
         return characMapper.characEntityToDTO(characRepository.save(charac), loadMovies);
     }
+    /*----------------DELETE CHARACTER FROM DATABASE BY ID (SOFT)----------------(DELETE)*/
+    public void delete(Long id) {
+        characRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Charac> getAllById(List<Long> characters) {
+        return null;
+    }
+
+    /*----------------*/
+
 
 
 }

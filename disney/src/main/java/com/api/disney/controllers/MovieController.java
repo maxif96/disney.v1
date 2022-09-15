@@ -38,11 +38,19 @@ public class MovieController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete (@PathVariable Long id){
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         movieService.delete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    @PutMapping("/{movieId}/character")
+    public ResponseEntity<MovieResponseDTO> addCharacter(@PathVariable Long movieId,
+                                                 @RequestBody MovieRequestDTO movieDTO,
+                                                 @RequestParam(value = "loadCharacters", required = false)
+                                                     boolean loadCharacters) throws Exception {
+        MovieResponseDTO movieResponse = movieService.addCharacter(movieId, movieDTO.getCharacters(), loadCharacters);
+        return ResponseEntity.ok().body(movieResponse);
+    }
 
 
 }

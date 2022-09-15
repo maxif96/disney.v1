@@ -1,6 +1,5 @@
 package com.api.disney.dtos;
 
-import com.api.disney.models.Charac;
 import com.api.disney.models.Genre;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,12 +11,10 @@ import java.util.List;
 @Setter
 public class MovieRequestDTO {
 
-
-    private String title;
     private String picture;
+    private String title;
     private LocalDate creationDate;
     private Integer score;
     private List<Long> characters;
     private List<Long> genres;
-
 }

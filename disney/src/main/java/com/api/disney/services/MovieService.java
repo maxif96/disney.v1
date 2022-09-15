@@ -2,7 +2,6 @@ package com.api.disney.services;
 
 import com.api.disney.dtos.MovieResponseDTO;
 import com.api.disney.dtos.MovieRequestDTO;
-
 import java.util.List;
 
 public interface MovieService {
@@ -14,6 +13,7 @@ public interface MovieService {
     void delete (Long id);
 
     MovieResponseDTO update (Long id, MovieResponseDTO dto, boolean loadCharacters);
+    MovieResponseDTO addCharacter(Long idMovie, List<Long> idCharacters, boolean loadCharacters) throws Exception;
 
 
 

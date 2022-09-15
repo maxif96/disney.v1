@@ -9,12 +9,10 @@ import com.api.disney.mappers.UsersMapper;
 import com.api.disney.models.UserEntity;
 import com.api.disney.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 
 @Service
